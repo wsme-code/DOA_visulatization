@@ -12,6 +12,7 @@ CHUNK = 4000
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 44100
+fs = RATE^-1
 
 p = pyaudio.PyAudio()
 
@@ -19,15 +20,12 @@ chosen_device_index = -1
 for x in range(0,p.get_device_count()):
     info = p.get_device_info_by_index(x)
     print(p.get_device_info_by_index(x))
-    if info["name"] == "pulse":
-        chosen_device_index = info["index"]
-        print("Chosen index: ", chosen_device_index)
 
 stream = p.open(
     format=FORMAT,
     channels=CHANNELS,
     rate=RATE,
-    input_device_index=chosen_device_index,
+    input_device_index=1,
     input=True,
     output=True,
     frames_per_buffer=CHUNK
@@ -38,7 +36,7 @@ stream2 = p.open(
     format=FORMAT,
     channels=CHANNELS,
     rate=RATE,
-    input_device_index=10, # index of my second mic
+    input_device_index=2, # index of my second mic
     input=True,
     output=True,
     frames_per_buffer=CHUNK
@@ -57,7 +55,7 @@ line_fft, = ax2.semilogx(x_fft, np.random.rand(CHUNK))
 
 ax.set_title("Webcam Mic")
 ax.set_ylim([-1.1,1.1])
-ax2.set_title("Condesnor mic")
+ax2.set_title("Condensor mic")
 ax2.set_ylim([0, 10000000])
 ax2.set_xlim([20, RATE / 2])
 
